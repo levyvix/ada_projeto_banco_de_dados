@@ -1,4 +1,7 @@
+drop schema if exists final cascade;
+
 create schema if not exists final;
+
 
 -- components
 create table final.components (
