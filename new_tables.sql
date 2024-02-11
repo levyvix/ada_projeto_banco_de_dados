@@ -5,7 +5,7 @@ create schema if not exists final;
 
 -- components
 create table final.components (
-	component_key serial primary key,
+	component_key smallserial primary key,
 	component_name varchar(10)
 );
 
@@ -40,8 +40,8 @@ maint_id,
 datetime,
 machineid as machine_id,
 c.component_key 
-from maint m 
-left join kaggle.components c 
+from kaggle.maint m 
+left join final.components c 
 	on c.component_name = m.component 
 );
 
@@ -61,9 +61,7 @@ create table final.error (
 );
 
 insert into final.error (error_id)
-select distinct errorid  from kaggle.errors_machine order by errorid;
-
-
+select distinct errorid  from kaggle.errors order by errorid;
 
 -- error-machine
 create table final.error_machine as (
@@ -72,10 +70,11 @@ em.error_id as error_machine_id,
 em.datetime,
 em.machineid as machine_id,
 e.error_key
-from kaggle.errors_machine em 
-left join kaggle.errors e 
+from kaggle.errors em 
+left join final.error e 
 	on em.errorid  = e.error_id 
 );
+
 
 alter table final.error_machine 
 add constraint pk_error_machine_id
@@ -90,8 +89,8 @@ references final.error(error_key);
 -- models
 
 create table final.models (
-	model_id serial primary key,
-	model varchar(10)
+	model_id smallserial primary key,
+	model varchar(10) not null
 );
 
 
@@ -137,25 +136,25 @@ references final.machine(machine_id);
 -- telemetry
 
 CREATE TABLE final.telemetry (
-    telemetry_id SERIAL PRIMARY KEY,
-    machine_id INTEGER,
-    datetime TIMESTAMP,
-    volt FLOAT,
-    rotate FLOAT,
-    pressure FLOAT,
-    vibration FLOAT
+    telemetry_id serial primary key,
+    machine_id smallint not null,
+    datetime timestamp not null,
+    volt real not null,
+    rotate real not null,
+    pressure real not null,
+    vibration real not null
 );
 
-INSERT INTO final.telemetry (machine_id, datetime, volt, rotate, pressure, vibration)
-SELECT
-    machineid,
-    datetime,
-    volt,
-    rotate,
-    pressure,
-    vibration
-FROM
-    kaggle.telemetry;
+insert into final.telemetry (machine_id, datetime, volt, rotate, pressure, vibration)
+select
+machineid,
+datetime,
+volt,
+rotate,
+pressure,
+vibration
+from
+kaggle.telemetry;
 
 
 alter table final.telemetry

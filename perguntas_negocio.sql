@@ -18,7 +18,7 @@ count(*) as f_count
 from final.failures f 
 left join final.machine m on f.machineid = m.machine_id 
 group by age
-order by f_count desc
+order by age asc
 
 
 -- Qual componente apresenta maior quantidade de falhas por máquina.

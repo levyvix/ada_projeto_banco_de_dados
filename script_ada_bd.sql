@@ -2,39 +2,39 @@ create schema if not exists kaggle;
 
 
 create table kaggle.machines (
-	machineID int primary key,
-	model varchar(10),
-	age int
+	machineID smallint primary key,
+	model varchar(10) not null,
+	age int not null
 );
 
 create table kaggle.errors (
 	error_id serial primary key,
-	datetime timestamp,
-	machineID int references kaggle.machines(machineID),
-	errorID varchar
+	datetime timestamp not null,
+	machineID int references kaggle.machines(machineID) not null,
+	errorID varchar not null
 );
 
 create table kaggle.failures(
 	failure_id serial primary key,
-	datetime timestamp,
-	machineID int references kaggle.machines(machineID),
-	failure varchar(10)
+	datetime timestamp not null,
+	machineID int references kaggle.machines(machineID) not null,
+	failure varchar(10) not null
 );
 
 create table kaggle.maint(
 	maint_id serial primary key,
-	datetime timestamp,
-	machineID int references kaggle.machines(machineID),
-	component varchar(10)
+	datetime timestamp not null,
+	machineID int references kaggle.machines(machineID) not null,
+	component varchar(10) not null
 );
 
 create table kaggle.telemetry(
 	datetime timestamp,
 	machineID int references kaggle.machines(machineID),
-	volt float,
-	rotate float,
-	pressure float,
-	vibration float,
+	volt float not null,
+	rotate float not null,
+	pressure float not null,
+	vibration float not null,
 	primary key (machineID, datetime)
 );
 
@@ -46,7 +46,3 @@ COPY kaggle.errors (datetime, machineID, errorID) FROM 'C:\Users\levyv\Desktop\B
 COPY kaggle.failures (datetime, machineID, failure) FROM 'C:\Users\levyv\Desktop\Banco de Dados I - Pasta Geral\dados\PdM_failures.csv' DELIMITER ',' CSV HEADER;
 COPY kaggle.maint (datetime, machineID, component) FROM 'C:\Users\levyv\Desktop\Banco de Dados I - Pasta Geral\dados\PdM_maint.csv' DELIMITER ',' CSV HEADER;
 COPY kaggle.telemetry  FROM 'C:\Users\levyv\Desktop\Banco de Dados I - Pasta Geral\dados\PdM_telemetry.csv' DELIMITER ',' CSV HEADER;
-
-COPY PdM_errors FROM 'C:\Users\levyv\Desktop\Banco de Dados I - Pasta Geral\dados\PdM_errors.csv' DELIMITER ',' CSV HEADER;
-
-COPY PdM_errors FROM 'C:\Users\levyv\Desktop\Banco de Dados I - Pasta Geral\dados\PdM_errors.csv' DELIMITER ',' CSV HEADER;
