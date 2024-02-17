@@ -1,7 +1,6 @@
 drop schema if exists final cascade;
 
-create schema if not exists final;
-
+create schema final;
 
 -- components
 create table final.components (
@@ -103,7 +102,7 @@ create table final.machine  as (
 select 
 m.machineid as machine_id,
 mds.model_id,
-m.age
+2024 - m.age as manufacture_year
 from kaggle.machines m 
 left join final.models mds
 	on mds.model = m.model
@@ -139,10 +138,10 @@ CREATE TABLE final.telemetry (
     telemetry_id serial primary key,
     machine_id smallint not null,
     datetime timestamp not null,
-    volt real not null,
-    rotate real not null,
-    pressure real not null,
-    vibration real not null
+    volt decimal(16, 13) not null,
+    rotate decimal(16, 13)  not null,
+    pressure decimal(16, 13)  not null,
+    vibration decimal(15, 13)  not null
 );
 
 insert into final.telemetry (machine_id, datetime, volt, rotate, pressure, vibration)
@@ -161,8 +160,6 @@ alter table final.telemetry
 add constraint fk_machine_id
 foreign key (machine_id)
 references final.machine(machine_id);
-
-
 
 
 
