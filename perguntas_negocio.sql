@@ -9,12 +9,12 @@ group  by m2.model
 order by failure_count desc
 
 -- Qual a quantidade de falhas por idade da máquina.
-SELECT 2024 - m.manufacture_year  as age,
+SELECT date_part('year', current_date) - m.manufacture_year  as age,
        count(*) AS f_count
 FROM final.failures f
 LEFT JOIN final.machine m ON f.machineid = m.machine_id
-GROUP BY 2024 - m.manufacture_year 
-ORDER BY age ASC
+GROUP BY date_part('year', current_date)- m.manufacture_year 
+ORDER BY age asc;
 
 
 -- Qual componente apresenta maior quantidade de falhas por máquina.
@@ -41,7 +41,7 @@ ORDER BY machine_id;
 
 -- A média da idade das máquinas por modelo
 SELECT m2.model,
-       avg(2024 - m.manufacture_year) AS average_age
+       avg(date_part('year', current_date) - m.manufacture_year) AS average_age
 FROM final.machine m
 LEFT JOIN final.models m2 ON m.model_id = m2.model_id
 GROUP BY m2.model;
