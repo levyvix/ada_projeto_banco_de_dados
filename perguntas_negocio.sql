@@ -41,7 +41,7 @@ ORDER BY machine_id;
 
 -- A média da idade das máquinas por modelo
 SELECT m2.model,
-       avg(m.age) AS average_age
+       avg(2024 - m.manufacture_year) AS average_age
 FROM final.machine m
 LEFT JOIN final.models m2 ON m.model_id = m2.model_id
 GROUP BY m2.model;
