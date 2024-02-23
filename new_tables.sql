@@ -23,10 +23,12 @@ left join final.components c
 on f.failure = c.component_name
 );
 
+-- primary key
 alter table final.failures 
 add constraint pk_failure_id
 primary key(failure_id);
 
+-- component_fk
 alter table final.failures 
 add constraint fk_component_key
 foreign key (component_key)
@@ -44,10 +46,13 @@ left join final.components c
 	on c.component_name = m.component 
 );
 
+-- primary-key
 alter table final.maint 
 add constraint pk_maint_id
 primary key(maint_id);
 
+
+-- component-fk
 alter table final.maint 
 add constraint fk_component_key
 foreign key (component_key)
@@ -74,11 +79,12 @@ left join final.error e
 	on em.errorid  = e.error_id 
 );
 
-
+-- error-machine-pk
 alter table final.error_machine 
 add constraint pk_error_machine_id
 primary key(error_machine_id);
 
+-- error-key-fk
 alter table final.error_machine 
 add constraint fk_error_key
 foreign key (error_key)
@@ -97,7 +103,7 @@ insert into final.models (model)
 select distinct model from kaggle.machines order by model;
 
 
-
+-- machine
 create table final.machine  as (
 select 
 m.machineid as machine_id,
@@ -108,25 +114,30 @@ left join final.models mds
 	on mds.model = m.model
 );
 
+-- machine-pk
 alter table final.machine 
 add constraint pk_machine_id
 primary key (machine_id);
 
+-- model-fk
 alter table final.machine
 add constraint fk_model_id
 foreign key (model_id)
 references final.models(model_id);
 
+-- maint-machine-fk
 alter table final.maint 
 add constraint fk_machine_id
 foreign key (machine_id)
 references final.machine(machine_id);
 
+-- failures-machine-fk
 alter table final.failures 
 add constraint fk_machine_id
 foreign key (machineid)
 references final.machine(machine_id);
 
+-- error_machine-machine-fk
 alter table final.error_machine 
 add constraint fk_machine_id
 foreign key (machine_id)
@@ -155,7 +166,7 @@ vibration
 from
 kaggle.telemetry;
 
-
+-- telemetry-pk
 alter table final.telemetry
 add constraint fk_machine_id
 foreign key (machine_id)
