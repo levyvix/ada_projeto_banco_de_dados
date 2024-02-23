@@ -60,5 +60,14 @@ GROUP BY e.error_id,
 ORDER BY COUNT desc;
 
 
+-- componente entre modelos
+select
+c.component_name, m2.model , count(*) as failure_count
+from failures f 
+left join components c on f.component_key = c.component_key 
+left join machine m on f.machineid = m.machine_id 
+left join models m2 on m2.model_id = m.model_id 
+group by c.component_name, m2.model 
+order by failure_count desc
 
 
